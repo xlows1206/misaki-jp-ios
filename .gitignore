@@ -1,0 +1,13 @@
+# Xcode
+.DS_Store
+*.swp
+*.lock
+*~
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+xcshareddata/
+xcschememanagement.plist
+.derivedData
+.build/
+.swiftpm/
