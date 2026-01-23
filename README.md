@@ -17,7 +17,7 @@ Add this package to your project using Swift Package Manager:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/your-username/misaki-jp-ios.git", from: "1.0.0")
+    .package(url: "https://github.com/xlows1206/misaki-jp-ios.git", from: "1.0.0")
 ]
 ```
 
