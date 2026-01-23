@@ -1,0 +1,4 @@
+module MisakiJPObjC {
+    umbrella "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include"
+    export *
+}

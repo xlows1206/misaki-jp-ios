@@ -1,0 +1,4 @@
+; MeCab resource file for UniDic
+; This file tells MeCab where to find the dictionary
+
+dicdir = .

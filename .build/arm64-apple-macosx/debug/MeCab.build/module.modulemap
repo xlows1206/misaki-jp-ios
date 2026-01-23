@@ -1,0 +1,4 @@
+module MeCab {
+    umbrella header "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab/MeCab.h"
+    export *
+}

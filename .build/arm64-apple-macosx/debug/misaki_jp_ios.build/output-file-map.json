@@ -1,0 +1,40 @@
+{
+  "": {
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/master.swiftdeps"
+  },
+  "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/CutletG2P.swift": {
+    "dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.d",
+    "object": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.swift.o",
+    "swiftmodule": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P~partial.swiftmodule",
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.swiftdeps",
+    "diagnostics": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.dia"
+  },
+  "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/JAG2P.swift": {
+    "dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.d",
+    "object": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.swift.o",
+    "swiftmodule": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P~partial.swiftmodule",
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.swiftdeps",
+    "diagnostics": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.dia"
+  },
+  "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/Num2Kana.swift": {
+    "dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.d",
+    "object": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.swift.o",
+    "swiftmodule": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana~partial.swiftmodule",
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.swiftdeps",
+    "diagnostics": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.dia"
+  },
+  "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/TextNormalizer.swift": {
+    "dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.d",
+    "object": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.swift.o",
+    "swiftmodule": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer~partial.swiftmodule",
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.swiftdeps",
+    "diagnostics": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.dia"
+  },
+  "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/DerivedSources/resource_bundle_accessor.swift": {
+    "dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.d",
+    "object": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.swift.o",
+    "swiftmodule": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.swiftdeps",
+    "diagnostics": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.dia"
+  }
+}

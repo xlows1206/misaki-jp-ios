@@ -1,0 +1,934 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.xctest/Contents/MacOS/misaki-jp-iosPackageTests",
+      "packagePath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios",
+      "productName" : "misaki-jp-iosPackageTests"
+    }
+  ],
+  "copyCommands" : {
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-ios_misaki-jp-ios.bundle/UniDic" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/Resources/UniDic"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-ios_misaki-jp-ios.bundle/UniDic"
+        }
+      ]
+    }
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.MisakiJPTests-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/sources",
+      "importPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/JAG2PIntegrationTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJPTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJP_DiagnosticTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/misaki_jp_ios.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "MisakiJPTests",
+      "moduleOutputPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/MisakiJPTests.swiftmodule",
+      "objects" : [
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/JAG2PIntegrationTests.swift.o",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/MisakiJPTests.swift.o",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/MisakiJP_DiagnosticTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include",
+        "-Xcc",
+        "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab",
+        "-module-cache-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-color-diagnostics",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "misaki_jp_ios"
+      ],
+      "outputFileMapPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/JAG2PIntegrationTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/MisakiJPTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/MisakiJP_DiagnosticTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/MisakiJPTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/JAG2PIntegrationTests.swift",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJPTests.swift",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJP_DiagnosticTests.swift"
+      ],
+      "tempsPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.misaki-jp-ios-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/sources",
+      "importPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/CutletG2P.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/JAG2P.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/Num2Kana.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/TextNormalizer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/DerivedSources/resource_bundle_accessor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<misaki-jp-ios-arm64-apple-macosx15.0-debug.module-resources>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/JapaneseG2P.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/JapaneseG2PWrapper.mm.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "misaki_jp_ios",
+      "moduleOutputPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/misaki_jp_ios.swiftmodule",
+      "objects" : [
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.swift.o",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.swift.o",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.swift.o",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.swift.o",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx11.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include",
+        "-Xcc",
+        "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab",
+        "-module-cache-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/include/misaki-jp-ios-Swift.h",
+        "-color-diagnostics",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "misaki_jp_ios"
+      ],
+      "outputFileMapPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/misaki_jp_ios.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/CutletG2P.swift",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/JAG2P.swift",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/Num2Kana.swift",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/TextNormalizer.swift",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/DerivedSources/resource_bundle_accessor.swift"
+      ],
+      "tempsPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.misaki-jp-iosPackageTests-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/sources",
+      "importPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/MisakiJPTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "misaki_jp_iosPackageTests",
+      "moduleOutputPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/misaki_jp_iosPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx11.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include",
+        "-Xcc",
+        "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab",
+        "-module-cache-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/include/misaki-jp-iosPackageTests-Swift.h",
+        "-color-diagnostics",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "misaki_jp_ios"
+      ],
+      "outputFileMapPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules/misaki_jp_iosPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "MisakiJPTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "MisakiJPTests",
+      "-package-name",
+      "misaki_jp_ios",
+      "-c",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/JAG2PIntegrationTests.swift",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJPTests.swift",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJP_DiagnosticTests.swift",
+      "-I",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include",
+      "-Xcc",
+      "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab",
+      "-module-cache-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-color-diagnostics",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "misaki_jp_ios",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "misaki_jp_ios" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "misaki_jp_ios",
+      "-package-name",
+      "misaki_jp_ios",
+      "-c",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/CutletG2P.swift",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/JAG2P.swift",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/Num2Kana.swift",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/TextNormalizer.swift",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/DerivedSources/resource_bundle_accessor.swift",
+      "-I",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx11.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include",
+      "-Xcc",
+      "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab",
+      "-module-cache-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/include/misaki-jp-ios-Swift.h",
+      "-color-diagnostics",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "misaki_jp_ios",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "misaki_jp_iosPackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "misaki_jp_iosPackageTests",
+      "-package-name",
+      "misaki_jp_ios",
+      "-c",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx11.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MisakiJPObjC/include",
+      "-Xcc",
+      "-fmodule-map-file=/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/MeCab",
+      "-module-cache-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/include/misaki-jp-iosPackageTests-Swift.h",
+      "-color-diagnostics",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "misaki_jp_ios",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "MeCab" : [
+
+    ],
+    "MisakiJPObjC" : [
+      "MeCab",
+      "OpenJTalk"
+    ],
+    "MisakiJPTests" : [
+      "misaki_jp_ios",
+      "MisakiJPObjC",
+      "MeCab",
+      "OpenJTalk"
+    ],
+    "misaki_jp_ios" : [
+      "MisakiJPObjC",
+      "MeCab",
+      "OpenJTalk"
+    ],
+    "misaki_jp_iosPackageTests" : [
+      "MisakiJPTests",
+      "misaki_jp_ios",
+      "MisakiJPObjC",
+      "MeCab",
+      "OpenJTalk"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/JAG2PIntegrationTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJPTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Tests/MisakiJPTests/MisakiJP_DiagnosticTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/sources"
+    },
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/char_property.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/connector.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/context_id.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/dictionary.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/feature_index.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/libmecab.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/nbest_generator.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/param.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/string_buffer.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/tagger.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/tokenizer.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/utils.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/viterbi.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MeCab.build/writer.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/JapaneseG2P.cpp.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPObjC.build/JapaneseG2PWrapper.mm.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/JAG2PIntegrationTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/MisakiJPTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/MisakiJPTests.build/MisakiJP_DiagnosticTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/CutletG2P.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/JAG2P.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/Num2Kana.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/TextNormalizer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/resource_bundle_accessor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/CutletG2P.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/JAG2P.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/Num2Kana.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/Sources/misaki-jp-ios/TextNormalizer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/DerivedSources/resource_bundle_accessor.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_ios.build/sources"
+    },
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/sources"
+    },
+    "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

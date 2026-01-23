@@ -1,0 +1,31 @@
+{
+  "object" : {
+    "artifacts" : [
+      {
+        "kind" : {
+          "xcframework" : {
+
+          }
+        },
+        "packageRef" : {
+          "identity" : "misaki-jp-ios",
+          "kind" : "root",
+          "location" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios",
+          "name" : "misaki-jp-ios"
+        },
+        "path" : "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/OpenJTalk.xcframework",
+        "source" : {
+          "type" : "local"
+        },
+        "targetName" : "OpenJTalk"
+      }
+    ],
+    "dependencies" : [
+
+    ],
+    "prebuilts" : [
+
+    ]
+  },
+  "version" : 7
+}

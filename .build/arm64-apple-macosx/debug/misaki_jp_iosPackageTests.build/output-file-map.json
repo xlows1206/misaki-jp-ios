@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/master.swiftdeps"
+  },
+  "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki-jp-iosPackageTests.derived/runner.swift": {
+    "dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.d",
+    "object": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.swiftdeps",
+    "diagnostics": "/Users/aaron.w/Desktop/PeraTalk/misaki-jp-ios/.build/arm64-apple-macosx/debug/misaki_jp_iosPackageTests.build/runner.dia"
+  }
+}
