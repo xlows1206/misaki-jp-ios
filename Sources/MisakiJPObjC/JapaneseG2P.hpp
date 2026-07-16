@@ -8,7 +8,8 @@
 // from the Swift/Objective-C++ header bridge if possible.
 struct OpenJTalkNode {
     std::string string;
-    std::string pron;
+    std::string read;   // 読み (f[7]): orthographic modern-kana reading (東京→トウキョウ, は→ハ)
+    std::string pron;   // 発音 (f[8]): phonetic pronunciation (東京→トーキョー, は→ワ)
     std::string pos;
     int acc;
     int mora_size;

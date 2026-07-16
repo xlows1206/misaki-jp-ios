@@ -117,6 +117,7 @@
         for (const auto& node : nodes) {
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
             dict[@"string"] = [NSString stringWithUTF8String:node.string.c_str()];
+            dict[@"read"] = [NSString stringWithUTF8String:node.read.c_str()];
             dict[@"pron"] = [NSString stringWithUTF8String:node.pron.c_str()];
             dict[@"pos"] = [NSString stringWithUTF8String:node.pos.c_str()];
             dict[@"acc"] = @(node.acc);

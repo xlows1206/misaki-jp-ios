@@ -9,6 +9,30 @@
 import Foundation
 import MisakiJPObjC
 
+/// A single tokenized morpheme with its dictionary readings.
+///
+/// Produced by `JAG2P.tokenize(_:)`. `read` is the orthographic modern-kana
+/// reading (feature f[7], 読み) used for ASR normalization; `pron` is the
+/// phonetic pronunciation (f[8], 発音) used for TTS.
+public struct JAToken: Equatable {
+    /// Surface form as segmented by MeCab.
+    public let surface: String
+    /// 読み (f[7]): orthographic katakana reading — for ASR normalization.
+    /// Guaranteed non-empty (fallback chain read → pron → surface).
+    public let read: String
+    /// 発音 (f[8]): phonetic katakana pronunciation — for TTS.
+    public let pron: String
+    /// Part of speech (feature f[0]).
+    public let pos: String
+
+    public init(surface: String, read: String, pron: String, pos: String) {
+        self.surface = surface
+        self.read = read
+        self.pron = pron
+        self.pos = pos
+    }
+}
+
 /// Japanese G2P - Main API matching Python misaki.ja.JAG2P
 ///
 /// Usage:
@@ -107,6 +131,56 @@ public class JAG2P {
         }
     }
     
+    /// Real dictionary tokenization with per-token orthographic reading.
+    ///
+    /// Unlike `getKatakanaReading()` (which takes the phonetic `pron` and joins
+    /// the whole utterance, losing token boundaries), this returns each MeCab
+    /// token with its **orthographic** reading (`read`, feature f[7]) — the
+    /// modern-kana form the ASR decoder emits (東京→トウキョウ, は→ハ, です→デス).
+    ///
+    /// Runs only MeCab morphological analysis via `extractNodes` — it does NOT
+    /// run njd / accent estimation, so no は→ワ or long-vowel→ー phonetic
+    /// post-processing is applied (that path produces `pron`, the opposite
+    /// direction). Use this for ASR normalization, not `AccentPipeline`.
+    ///
+    /// - Parameter text: Input Japanese text.
+    /// - Returns: One `JAToken` per token; `read` is guaranteed non-empty
+    ///            (fallback chain read → pron → surface).
+    public func tokenize(_ text: String) -> [JAToken] {
+        let normalized = TextNormalizer.normalize(text, toHiragana: isStubMode)
+
+        guard let wrapper = g2pWrapper,
+              let nodes = wrapper.extractNodes(normalized) else {
+            return []
+        }
+
+        var tokens: [JAToken] = []
+        tokens.reserveCapacity(nodes.count)
+        for node in nodes {
+            let surface = (node["string"] as? String) ?? ""
+            let read = (node["read"] as? String) ?? ""
+            let pron = (node["pron"] as? String) ?? ""
+            let pos = (node["pos"] as? String) ?? ""
+
+            // UNK / noise nodes can have an empty read (f[7]); guarantee the
+            // caller always gets a non-empty reading: read → pron → surface.
+            let resolvedRead: String
+            if !read.isEmpty {
+                resolvedRead = read
+            } else if !pron.isEmpty {
+                resolvedRead = pron
+            } else {
+                resolvedRead = surface
+            }
+
+            tokens.append(JAToken(surface: surface,
+                                  read: resolvedRead,
+                                  pron: pron.isEmpty ? resolvedRead : pron,
+                                  pos: pos))
+        }
+        return tokens
+    }
+
     private func extractPitch(from nodes: [[String: Any]]) -> [Int] {
         var pitchAccent: [Int] = []
         for node in nodes {

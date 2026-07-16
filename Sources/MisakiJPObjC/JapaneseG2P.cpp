@@ -206,6 +206,11 @@ struct JapaneseG2P::Impl {
             for (size_t i = 0; i < partCount; i++) {
                 OpenJTalkNode info;
                 info.pos = pos;
+                // read (f[7]) split in lockstep with pron/orig/acc so the i-th
+                // chain part's read aligns with the same part's pron/surface.
+                // Kept raw here (may be empty for UNK nodes); the read->pron->
+                // surface non-empty fallback lives in the Swift tokenize() API.
+                info.read = i < readParts.size() ? readParts[i] : "";
                 info.pron = i < pronParts.size() ? pronParts[i] : "";
                 if (info.pron.empty()) {
                     info.pron = i < readParts.size() ? readParts[i] : "";

@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Extract structure word nodes (including accent, mora size, pronunciation).
 /// @param text Input Japanese text.
-/// @return Array of Dictionaries containing node info ("pron", "acc", "mora_size", "string", "pos", "chain_flag").
+/// @return Array of Dictionaries containing node info ("read", "pron", "acc", "mora_size", "string", "pos", "chain_flag").
 - (nullable NSArray<NSDictionary<NSString *, id> *> *)extractNodes:(NSString *)text;
 
 /// Indicates if this is the stub version (always NO for full version)
