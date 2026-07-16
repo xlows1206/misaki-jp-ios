@@ -8,8 +8,17 @@ final class JAG2PIntegrationTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Initialize without OpenJTalk for direct hiragana mode
-        g2p = JAG2P()
+        // Initialize without OpenJTalk for direct hiragana mode.
+        // Force stub mode explicitly via a bogus dictionary path: since the
+        // UniDic LFS-pointer bug was fixed (commit d79d393), JAG2P() with no
+        // args now finds the *real* dictionary in the test bundle and runs
+        // the full OpenJTalk/MeCab pipeline (processNodes, with pitch-accent
+        // markers) instead of the direct-hiragana CutletG2P.convert() stub
+        // path this test class was written to exercise. An invalid path
+        // makes JapaneseG2PWrapper's init fail deterministically, restoring
+        // the "direct hiragana mode" this class's tests assume, regardless
+        // of whether a real dictionary happens to be bundled.
+        g2p = JAG2P(dicPath: "/nonexistent-force-stub-mode")
     }
     
     // MARK: - Direct Hiragana Mode Tests

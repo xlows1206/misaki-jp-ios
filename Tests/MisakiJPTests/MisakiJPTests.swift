@@ -58,17 +58,25 @@ final class TextNormalizerTests: XCTestCase {
     func testUnicodeNormalization() {
         // Test NFKC normalization
         let input = "ＡＢＣ１２３"  // Full-width
-        let result = TextNormalizer.normalize(input)
+        // toHiragana: true — the assertions below check for a Hiragana number
+        // reading ("ひゃくにじゅうさん"). normalize()'s default (toHiragana:
+        // false) is Kanji mode ("百二十三"), used to feed OpenJTalk; only the
+        // explicit Hiragana/Stub mode produces the reading these assertions
+        // check for (this is also the only mode PeraTalk's own
+        // JapaneseTextNormalizer.normalizeForTTS actually calls in production).
+        let result = TextNormalizer.normalize(input, toHiragana: true)
         print("Unicode normalization: \(input) → \(result)")
         // Should contain number conversion
         XCTAssertNotEqual(result, input)
         XCTAssertTrue(result.contains("ABC"))
         XCTAssertTrue(result.contains("ひゃくにじゅうさん"))
     }
-    
+
     func testNumberInText() {
         let input = "これは123円です"
-        let result = TextNormalizer.normalize(input)
+        // See testUnicodeNormalization: toHiragana: true is required for the
+        // Hiragana-reading assertion below; the default is Kanji mode.
+        let result = TextNormalizer.normalize(input, toHiragana: true)
         print("Text with number: \(input) → \(result)")
         XCTAssertTrue(result.contains("ひゃくにじゅうさん"))
     }
