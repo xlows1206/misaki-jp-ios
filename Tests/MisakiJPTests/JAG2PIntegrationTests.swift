@@ -1,5 +1,5 @@
 import XCTest
-@testable import MisakiJP
+@testable import misaki_jp_ios
 
 /// Integration tests for full MisakiJP pipeline
 final class JAG2PIntegrationTests: XCTestCase {

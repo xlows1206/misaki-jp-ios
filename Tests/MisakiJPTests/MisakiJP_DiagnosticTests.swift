@@ -1,5 +1,5 @@
 import XCTest
-@testable import MisakiJP
+@testable import misaki_jp_ios
 
 
 /// Diagnostic tests for MisakiJP JAG2P dictionary loading
