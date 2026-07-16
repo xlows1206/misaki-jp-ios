@@ -10,437 +10,244 @@
 #include <vector>
 #include <sstream>
 
-// UniDic feature field indices (from dicrc)
-// f[0]:  pos1 (品詞大分類)
-// f[1]:  pos2 (品詞中分類)
-// f[2]:  pos3 (品詞小分類)
-// f[3]:  pos4 (品詞細分類)
-// f[9]:  pron (発音/カタカナ発音)
-// f[20]: kana (読み/カタカナ)
-// f[24]: aType (アクセント型)
+// naist-jdic feature field indices -- VERIFIED against the actual sys.dic
+// compiled into this package's Resources/UniDic (not just the dicrc's
+// comments, which describe a 29-column UniDic schema that does NOT match
+// what's actually baked into sys.dic). Verification method: a standalone
+// MeCab CLI build (Sources/MeCab is plain portable C++, no OpenJTalk
+// binary needed) loaded this exact dictionary and printed raw node->feature
+// for real sentences, e.g.:
+//   東京   -> "名詞,固有名詞,地域,一般,*,*,東京,トウキョウ,トーキョー,0/4,C2"
+//   ませ   -> "助動詞,*,*,*,特殊・マス,未然形,ます,マセ,マセ,1/2,動詞%F4@1/助詞%F2@1"
+// 11 comma-separated fields, matching classic naist-jdic layout exactly
+// (this is also the layout mecab2njd()/NJDNode_load() expect natively --
+// see AccentPipeline.cpp).
+//
+// f[0]:  pos          (品詞1)
+// f[1]:  pos_group1    (品詞2)
+// f[2]:  pos_group2    (品詞3)
+// f[3]:  pos_group3    (品詞4)
+// f[4]:  ctype         (活用型)
+// f[5]:  cform         (活用形)
+// f[6]:  orig          (原形)
+// f[7]:  read          (読み)
+// f[8]:  pron          (発音)
+// f[9]:  acc/mora      ("N/M", or "N1/M1:N2/M2:..." for a dictionary entry
+//                        that packs multiple chained morphemes -- see below)
+// f[10]: chain_rule
+//
+// Chained/compound entries: some naist-jdic entries (typically fixed
+// expressions like 感動詞 "ありがとうございます") store MULTIPLE morphemes
+// in a single dictionary row, with orig/read/pron/acc EACH colon-separated
+// per sub-morpheme, e.g. for "ありがとうございます":
+//   orig = "ありがとう:ございます"
+//   pron = "アリガトー:ゴザイマス'"
+//   acc  = "2/5:4/5"
+// OpenJTalk's own NJDNode_load() (njd_node.c) splits these into N separate
+// NJDNodes; extractNodes() below does the equivalent for this flatter node
+// representation, splitting on ':' the same way, so callers (e.g.
+// getKatakanaReading()) get clean per-morpheme readings instead of the raw
+// colon-joined dictionary row. This was the root cause of the T-ticket bug
+// (ありがとうございます -> "2/5:4/5"): the OLD field-index heuristic here
+// failed to recognize f[9] as the accent field specifically BECAUSE it
+// contains a ':' (its "looks like accent" check only allowed digits and
+// '/'), fell back to a hard-coded wrong default index, and the raw acc/mora
+// string leaked straight into the "pron" output.
+
+static std::vector<std::string> splitFeatureCSV(const char* feature) {
+    std::vector<std::string> fields;
+    std::string current;
+    bool inQuotes = false;
+    for (const char* p = feature; *p; ++p) {
+        if (*p == '"') {
+            inQuotes = !inQuotes;
+        } else if (*p == ',' && !inQuotes) {
+            fields.push_back(current);
+            current.clear();
+        } else {
+            current += *p;
+        }
+    }
+    fields.push_back(current);
+    for (auto& v : fields) {
+        if (v.size() >= 2 && v.front() == '"' && v.back() == '"') {
+            v = v.substr(1, v.size() - 2);
+        }
+        if (v == "*") v.clear();
+    }
+    return fields;
+}
+
+static std::vector<std::string> splitOn(const std::string& s, char delim) {
+    std::vector<std::string> parts;
+    std::string cur;
+    for (char c : s) {
+        if (c == delim) { parts.push_back(cur); cur.clear(); }
+        else cur += c;
+    }
+    parts.push_back(cur);
+    return parts;
+}
+
+// Count moras in a katakana string (small kana / long-vowel mark don't add
+// a new mora; sokuon ッ does).
+static int countMoras(const std::string& kana) {
+    static const char* small[] = {
+        "ァ","ィ","ゥ","ェ","ォ","ャ","ュ","ョ", nullptr
+    };
+    int moraCount = 0;
+    for (size_t i = 0; i < kana.size(); ) {
+        unsigned char c = kana[i];
+        int len = (c < 0x80) ? 1 : (c < 0xE0) ? 2 : (c < 0xF0) ? 3 : 4;
+        std::string cp = kana.substr(i, len);
+        bool isSmall = false;
+        for (int k = 0; small[k]; k++) if (cp == small[k]) { isSmall = true; break; }
+        if (cp != "ー" && !isSmall) moraCount++;
+        i += len;
+    }
+    return moraCount;
+}
 
 struct JapaneseG2P::Impl {
     mecab_t* tagger;
     bool loaded;
-    
+
     Impl(const std::string& dictionaryPath) : tagger(nullptr), loaded(false) {
-        std::cerr << "[MeCab Debug] Attempting to load dictionary..." << std::endl;
-        std::cerr << "[MeCab Debug] Dictionary path: " << dictionaryPath << std::endl;
-        
-        // Verify path exists
         struct stat info;
-        if (stat(dictionaryPath.c_str(), &info) != 0) {
-            std::cerr << "[MeCab Error] Path does not exist: " << dictionaryPath << std::endl;
-            return;
-        } else if (!(info.st_mode & S_IFDIR)) {
-            std::cerr << "[MeCab Error] Path is not a directory: " << dictionaryPath << std::endl;
+        if (stat(dictionaryPath.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR)) {
+            std::cerr << "[JapaneseG2P] dictionary path invalid: " << dictionaryPath << std::endl;
             return;
         }
-        
-        std::cerr << "[MeCab Debug] Path verified as directory" << std::endl;
-        
-        // Check for sys.dic
         std::string sysDicPath = dictionaryPath + "/sys.dic";
-        struct stat sysDicInfo;
-        if (stat(sysDicPath.c_str(), &sysDicInfo) == 0) {
-            std::cerr << "[MeCab Debug] sys.dic found at: " << sysDicPath << std::endl;
-            std::cerr << "[MeCab Debug] sys.dic size: " << sysDicInfo.st_size << " bytes" << std::endl;
-        } else {
-            std::cerr << "[MeCab Error] sys.dic not found at: " << sysDicPath << std::endl;
+        if (stat(sysDicPath.c_str(), &info) != 0) {
+            std::cerr << "[JapaneseG2P] sys.dic not found at: " << sysDicPath << std::endl;
             return;
         }
-        
-        // Use standard MeCab API: mecab_new2("-d path -r /dev/null")
+
         std::string args = "-d " + dictionaryPath + " -r /dev/null";
-        std::cerr << "[MeCab Debug] Calling Mecab_load (standard API)..." << std::endl;
-        std::cerr << "[MeCab Debug] Args: " << args << std::endl;
-        
         tagger = mecab_new2(args.c_str());
-        
         if (tagger) {
             loaded = true;
-            std::cerr << "[MeCab Debug] Mecab_load returned: 1" << std::endl;
-            std::cerr << "[MeCab Debug] ✅ MeCab loaded successfully (standard API)" << std::endl;
-            
-            // Print dictionary info
-            const mecab_dictionary_info_t* dicInfo = mecab_dictionary_info(tagger);
-            if (dicInfo) {
-                std::cerr << "[MeCab Debug] Dictionary: " << (dicInfo->filename ? dicInfo->filename : "unknown") << std::endl;
-                std::cerr << "[MeCab Debug] Charset: " << (dicInfo->charset ? dicInfo->charset : "unknown") << std::endl;
-            }
         } else {
-            std::cerr << "[MeCab Error] ❌ Failed to create tagger" << std::endl;
-            std::cerr << "[MeCab Error] Last error: " << mecab_strerror(nullptr) << std::endl;
+            std::cerr << "[JapaneseG2P] mecab_new2 failed: " << mecab_strerror(nullptr) << std::endl;
         }
     }
-    
+
     ~Impl() {
         if (tagger) {
             mecab_destroy(tagger);
             tagger = nullptr;
         }
     }
-    
-    // Parse UniDic feature CSV and extract specific field
-    std::string getFeatureField(const char* feature, int index) {
-        if (!feature) return "";
-        
-        std::vector<std::string> fields;
-        std::string current;
-        bool inQuotes = false;
-        
-        for (const char* p = feature; *p; ++p) {
-            if (*p == '"') {
-                inQuotes = !inQuotes;
-            } else if (*p == ',' && !inQuotes) {
-                fields.push_back(current);
-                current.clear();
-            } else {
-                current += *p;
-            }
-        }
-        fields.push_back(current);
-        
-        if (index < (int)fields.size()) {
-            std::string val = fields[index];
-            // Remove surrounding quotes if present
-            if (val.size() >= 2 && val.front() == '"' && val.back() == '"') {
-                val = val.substr(1, val.size() - 2);
-            }
-            // Return empty for placeholder "*"
-            if (val == "*") return "";
-            return val;
-        }
-        return "";
-    }
-    
-    // Parse accent type from UniDic format (e.g., "0" or "0,2")
-    int parseAccentType(const std::string& aType) {
-        if (aType.empty()) return 0;
-        // Take first number before comma
-        size_t comma = aType.find(',');
-        std::string first = comma != std::string::npos ? aType.substr(0, comma) : aType;
-        try {
-            return std::stoi(first);
-        } catch (...) {
-            return 0;
-        }
-    }
-    
-    // Count moras in a katakana string
-    int countMoras(const std::string& kana) {
-        // Small kana don't count as separate moras
-        static const char* smallKana[] = {
-            "ァ", "ィ", "ゥ", "ェ", "ォ", "ャ", "ュ", "ョ", nullptr
-        };
-        
-        int moraCount = 0;
-        const char* p = kana.c_str();
-        while (*p) {
-            // Get UTF-8 character length
-            int charLen = 1;
-            if ((*p & 0xF0) == 0xF0) charLen = 4;
-            else if ((*p & 0xE0) == 0xE0) charLen = 3;
-            else if ((*p & 0xC0) == 0xC0) charLen = 2;
-            
-            std::string ch(p, charLen);
-            
-            // Check if it's a small kana
-            bool isSmall = false;
-            for (const char** sk = smallKana; *sk; ++sk) {
-                if (ch == *sk) {
-                    isSmall = true;
-                    break;
-                }
-            }
-            
-            // Long vowel mark is not a separate mora
-            if (ch != "ー" && !isSmall) {
-                moraCount++;
-            }
-            
-            p += charLen;
-        }
-        return moraCount;
-    }
-    
+
     std::vector<std::string> extractPhonemes(const std::string& text) {
         std::vector<std::string> result;
-        
-        if (!loaded) {
-            std::cerr << "Mecab not loaded" << std::endl;
-            return result;
-        }
-        
+        if (!loaded) return result;
+
         const mecab_node_t* node = mecab_sparse_tonode(tagger, text.c_str());
-        if (!node) {
-            std::cerr << "[MeCab Error] parseToNode failed" << std::endl;
-            return result;
-        }
-        
-        // Collect pronunciations from UniDic
+        if (!node) return result;
+
         for (const mecab_node_t* n = node; n; n = n->next) {
-            if (n->stat == MECAB_NOR_NODE || n->stat == MECAB_UNK_NODE) {
-                // Get pronunciation (f[9]) from UniDic
-                std::string pron = getFeatureField(n->feature, 9);
-                if (!pron.empty()) {
-                    result.push_back(pron);
+            if (n->stat != MECAB_NOR_NODE && n->stat != MECAB_UNK_NODE) continue;
+            auto fields = splitFeatureCSV(n->feature);
+            if (fields.size() > 8 && !fields[8].empty()) {
+                // pron may be colon-joined for chained entries; emit each part.
+                for (auto& p : splitOn(fields[8], ':')) {
+                    if (!p.empty()) result.push_back(p);
                 }
             }
         }
-        
         return result;
     }
-    
+
     std::vector<std::string> extractFullContextLabels(const std::string& text) {
         return extractPhonemes(text);
     }
-    
+
     std::vector<OpenJTalkNode> extractNodes(const std::string& text) {
         std::vector<OpenJTalkNode> nodes;
-        
         if (!loaded) {
-            std::cerr << "Mecab not loaded" << std::endl;
+            std::cerr << "[JapaneseG2P] not loaded" << std::endl;
             return nodes;
         }
-        
-        std::cerr << "[MeCab Debug] extractNodes input: " << text << std::endl;
-        
+
         const mecab_node_t* node = mecab_sparse_tonode(tagger, text.c_str());
         if (!node) {
-            std::cerr << "[MeCab Error] parseToNode failed" << std::endl;
+            std::cerr << "[JapaneseG2P] parseToNode failed" << std::endl;
             return nodes;
         }
-        
-        // Extract node info directly from UniDic features
-        for (const mecab_node_t* n = node; n; n = n->next) {
-            if (n->stat == MECAB_NOR_NODE || n->stat == MECAB_UNK_NODE) {
-                OpenJTalkNode info;
-                
-                // Surface form
-                info.string = std::string(n->surface, n->length);
-                
-                // POS (f[0])
-                info.pos = getFeatureField(n->feature, 0);
-                
-                // Pronunciation (f[9] - カタカナ発音)
-                info.pron = getFeatureField(n->feature, 9);
-                if (info.pron.empty()) {
-                    // Fallback to kana (f[20])
-                    info.pron = getFeatureField(n->feature, 20);
-                }
-                
-                // Accent type (f[24])
-                std::string aType = getFeatureField(n->feature, 24);
-                info.acc = parseAccentType(aType);
-                
-                // Mora size (count from pronunciation)
-                info.mora_size = countMoras(info.pron);
-                
-                // Chain flag - set to 0 for now (would need multi-word analysis)
-                info.chain_flag = 0;
-                
-                // Debug: print raw feature string
-                std::cerr << "[MeCab Debug] Raw feature: " << n->feature << std::endl;
-                
-                // Debug: parse and print all fields
-                std::vector<std::string> debugFields;
-                std::string debugCurrent;
-                bool debugInQuotes = false;
-                for (const char* dp = n->feature; *dp; ++dp) {
-                    if (*dp == '"') {
-                        debugInQuotes = !debugInQuotes;
-                    } else if (*dp == ',' && !debugInQuotes) {
-                        debugFields.push_back(debugCurrent);
-                        debugCurrent.clear();
-                    } else {
-                        debugCurrent += *dp;
-                    }
-                }
-                debugFields.push_back(debugCurrent);
-                
-                std::cerr << "[MeCab Debug] Field count: " << debugFields.size() << std::endl;
-                for (size_t fi = 0; fi < debugFields.size() && fi < 30; ++fi) {
-                    std::cerr << "[MeCab Debug]   f[" << fi << "]: " << debugFields[fi] << std::endl;
-                }
-                
-                // Auto-detect field indices if not already found
-                int pronIndex = 9;  // Default UniDic
-                int accIndex = 24;  // Default UniDic
-                
-                // Scan fields to find best candidates
-                int candidatePron = -1;
-                int candidateAcc = -1;
-                
-                for (size_t i = 0; i < debugFields.size(); ++i) {
-                    const std::string& field = debugFields[i];
-                    if (field == "*" || field.empty()) continue;
-                    
-                    // Check for Pronunciation (Katakana)
-                    // Simple heuristic: check if string contains Katakana range bytes
-                    // UTF-8 Katakana: E3 82 A0 - E3 83 BF
-                    bool isKatakana = true;
-                    bool hasKatakana = false;
-                    for (size_t c = 0; c < field.length(); ) {
-                        unsigned char uc = (unsigned char)field[c];
-                        if (uc >= 0xE3 && c+2 < field.length()) {
-                            unsigned char uc2 = (unsigned char)field[c+1];
-                            // unsigned char uc3 = (unsigned char)field[c+2];
-                            if (uc == 0xE3 && (uc2 >= 0x82 && uc2 <= 0x83)) {
-                                hasKatakana = true;
-                                c += 3;
-                            } else if (uc == 0xE3 && uc2 == 0x81 && field[c+2] == 0x9B) { 
-                                // Long vowel mark ー (E3 81 9B) often in Hiragana block too? 
-                                // Actually ー is E3 83 BC in Katakana block usually.
-                                // Let's simplify: just look for HIGH BIT chars that aren't digits
-                                c += 3;
-                            } else {
-                                // Maybe Kanji or Hiragana
-                                if (uc2 < 0x80) { isKatakana = false; break; } // ASCII
-                                c += 3; // Assume 3-byte UTF8
-                            }
-                        } else if (uc == '-' || uc == '!') {
-                            c++; // Allowed chars
-                        } else {
-                            // Non-katakana char (e.g. digit, ascii)
-                            isKatakana = false;
-                            break;
-                        }
-                    }
-                    
-                    // Specific Katakana check (more robust)
-                    bool looksLikePron = true;
-                    for (size_t c = 0; c < field.length(); ) {
-                        unsigned char uc = (unsigned char)field[c];
-                         if (uc < 0x80) {
-                            if (uc != '!' && uc != '?' && uc != '-') { 
-                                looksLikePron = false; break; 
-                            }
-                            c++;
-                         } else {
-                             // Check for Katakana block E3 82 xx - E3 83 xx
-                             if (uc == 0xE3 && c+2 < field.length()) {
-                                 unsigned char uc2 = (unsigned char)field[c+1];
-                                 if (uc2 >= 0x82 && uc2 <= 0x83) {
-                                     c += 3; continue;
-                                 }
-                             }
-                             looksLikePron = false; break;
-                         }
-                    }
-                    
-                    if (looksLikePron && field.length() > 0) {
-                        // Prefer LATER fields if multiple match.
-                        // Typically: [Surface] ... [Reading/f7] [Pronunciation/f8] [Accent/f9]
-                        // We want Pronunciation (f8) because it handles particles correctly (e.g. Ha -> Wa).
-                        // Note: If f8 contains symbols like ' (e.g. デス’), it will be rejected by checks above, 
-                        // so we correctly fall back to f7 (Reading).
-                        candidatePron = (int)i;
-                    }
-                    
-                    // Check for Accent (Integer or N/M format)
-                    // Format: "0", "1", "0,2", "0/4"
-                    bool isDigitOrSlash = true;
-                    bool hasDigit = false;
-                    for (char c : field) {
-                        if (!isdigit(c) && c != '/' && c != ',') {
-                            isDigitOrSlash = false;
-                            break;
-                        }
-                        if (isdigit(c)) hasDigit = true;
-                    }
-                    if (isDigitOrSlash && hasDigit) {
-                        // Usually accent is later in the list
-                        if (i > 15) candidateAcc = (int)i; 
-                    }
-                }
-                
-                // Override indices if detection seems better
-                // User reported f[9] was "0/5" (accent-like).
-                // So if f[9] looks like accent, we DEFINITELY need to move.
-                std::string valAt9 = (9 < debugFields.size()) ? debugFields[9] : "";
-                bool f9IsAcc = false;
-                 for (char c : valAt9) { if (isdigit(c) || c=='/') f9IsAcc=true; else if(c!='*'){f9IsAcc=false; break;} }
-                
-                if (f9IsAcc && candidatePron != -1) {
-                    std::cerr << "[MeCab Fix] f[9] looks like Accent '" << valAt9 << "', switching Pron to f[" << candidatePron << "]" << std::endl;
-                    pronIndex = candidatePron;
-                    
-                    // CRITICAL FIX: If f[9] is the accent field (Format: Accent/Mora, e.g. "0/5"), 
-                    // we MUST use it for accent info. The default f[24] is empty/invalid in this dictionary.
-                    accIndex = 9;  // Force accIndex to 9
-                    std::cerr << "[MeCab Fix] Also switching Acc to f[9] to capture '" << valAt9 << "'" << std::endl;
-                }
-                
-                if (candidateAcc != -1 && candidateAcc != accIndex && !f9IsAcc) { // Only search if we haven't found it at f9
-                     // Only switch if current accIndex is clearly wrong (e.g. out of bounds or empty)
-                     if (accIndex >= debugFields.size() || debugFields[accIndex] == "*" || debugFields[accIndex].empty()) {
-                         std::cerr << "[MeCab Fix] Switching Acc to f[" << candidateAcc << "]" << std::endl;
-                         accIndex = candidateAcc;
-                     }
-                }
-                
-                std::cerr << "[MeCab Debug] Using indices :: Pron: " << pronIndex << ", Acc: " << accIndex << std::endl;
 
-                std::cerr << "[MeCab Debug] Node: surface='" << info.string 
-                          << "' pron='" << info.pron 
-                          << "' pos='" << info.pos 
-                          << "' acc=" << info.acc 
-                          << " mora=" << info.mora_size << std::endl;
-                
-                // RE-READ with correct indices
-                info.pron = getFeatureField(n->feature, pronIndex);
-                if (info.pron.empty()) info.pron = getFeatureField(n->feature, 20); // Fallback
-                
-                std::string aTypeRaw = getFeatureField(n->feature, accIndex);
-                
-                // Special handling for "Accent/Mora" format (e.g., "0/5")
-                // Standard parseAccentType handles "0,2" but maybe not "0/5" correctly if not robust.
-                // Let's ensure we handle the slash.
-                size_t slashPos = aTypeRaw.find('/');
-                if (slashPos != std::string::npos) {
-                    try {
-                        std::string accPart = aTypeRaw.substr(0, slashPos);
-                        info.acc = std::stoi(accPart);
-                        
-                        // We can also trust the mora count from here if valid
-                        std::string moraPart = aTypeRaw.substr(slashPos + 1);
-                        int parsedMora = std::stoi(moraPart);
-                        if (parsedMora > 0) {
-                             info.mora_size = parsedMora;
-                             // Note: We'll still count moras from pron below as a fallback/verification, 
-                             // but we should prefer this if the dictionary provides it explicitly.
-                        }
-                    } catch (...) {
-                        info.acc = 0;
-                    }
+        for (const mecab_node_t* n = node; n; n = n->next) {
+            if (n->stat != MECAB_NOR_NODE && n->stat != MECAB_UNK_NODE) continue;
+
+            auto fields = splitFeatureCSV(n->feature);
+            std::string pos     = fields.size() > 0 ? fields[0] : "";
+            std::string orig    = fields.size() > 6 ? fields[6] : "";
+            std::string read    = fields.size() > 7 ? fields[7] : "";
+            std::string pron    = fields.size() > 8 ? fields[8] : "";
+            std::string accMora = fields.size() > 9 ? fields[9] : "";
+
+            std::string surface(n->surface, n->length);
+
+            // Chained/compound entry: orig/read/pron/acc are each colon-
+            // separated per sub-morpheme (see file-level comment above).
+            // Split them in lockstep and emit one OpenJTalkNode per part,
+            // mirroring OpenJTalk's own NJDNode_load() chain-splitting so
+            // callers never see raw "reading1:reading2" / "acc1/mora1:acc2/mora2"
+            // garbage.
+            std::vector<std::string> origParts = splitOn(orig, ':');
+            std::vector<std::string> readParts = splitOn(read, ':');
+            std::vector<std::string> pronParts = splitOn(pron, ':');
+            std::vector<std::string> accParts  = splitOn(accMora, ':');
+            size_t partCount = std::max(std::max(origParts.size(), readParts.size()),
+                                         std::max(pronParts.size(), accParts.size()));
+            if (partCount == 0) partCount = 1;
+
+            for (size_t i = 0; i < partCount; i++) {
+                OpenJTalkNode info;
+                info.pos = pos;
+                info.pron = i < pronParts.size() ? pronParts[i] : "";
+                if (info.pron.empty()) {
+                    info.pron = i < readParts.size() ? readParts[i] : "";
+                }
+
+                // Only the final chain-part keeps the node's real MeCab surface
+                // span; earlier parts use their dictionary orig form, same as
+                // OpenJTalk's own NJDNode_load() (which likewise has no way to
+                // recover the exact original character span for interior
+                // chain parts -- the surface bytes only exist as one run).
+                if (partCount > 1 && i + 1 < partCount) {
+                    info.string = i < origParts.size() ? origParts[i] : "";
                 } else {
-                    info.acc = parseAccentType(aTypeRaw);
+                    info.string = surface;
                 }
-                
-                // If we didn't get mora size from the feature (or it wasn't the slash format), calculate it
-                if (slashPos == std::string::npos) {
-                    info.mora_size = countMoras(info.pron);
+
+                int acc = 0, mora = 0;
+                if (i < accParts.size() && !accParts[i].empty()) {
+                    auto accMoraParts = splitOn(accParts[i], '/');
+                    if (!accMoraParts.empty() && !accMoraParts[0].empty()) {
+                        try { acc = std::stoi(accMoraParts[0]); } catch (...) { acc = 0; }
+                    }
+                    if (accMoraParts.size() > 1 && !accMoraParts[1].empty()) {
+                        try { mora = std::stoi(accMoraParts[1]); } catch (...) { mora = 0; }
+                    }
                 }
-                
-                // Detailed Verification Log
-                std::cerr << "[MeCab Verification] Index [" << pronIndex << "] (Pron): '" << info.pron << "'" << std::endl;
-                std::cerr << "[MeCab Verification] Index [" << accIndex << "] (Acc): '" << aTypeRaw << "' -> parsed=" << info.acc << std::endl;
-                std::cerr << "[MeCab Corrected] Node: surface='" << info.string 
-                          << "' pron='" << info.pron 
-                          << "' acc=" << info.acc 
-                          << " mora=" << info.mora_size 
-                          << " pos='" << info.pos << "'" << std::endl;
-                
+                if (mora <= 0) {
+                    mora = countMoras(info.pron);
+                }
+                info.acc = acc;
+                info.mora_size = mora;
+                info.chain_flag = (partCount > 1 && i > 0) ? 1 : 0;
+
                 nodes.push_back(info);
             }
         }
-        
+
         return nodes;
     }
 };
 
-JapaneseG2P::JapaneseG2P(const std::string& dictionaryPath) 
+JapaneseG2P::JapaneseG2P(const std::string& dictionaryPath)
     : pImpl(std::make_unique<Impl>(dictionaryPath)) {}
 
 JapaneseG2P::~JapaneseG2P() = default;
