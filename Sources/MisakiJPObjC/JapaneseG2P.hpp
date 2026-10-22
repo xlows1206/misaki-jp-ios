@@ -23,9 +23,12 @@ struct OpenJTalkNode {
     std::string cform;  // f[5] 活用形
     std::string orig;   // f[6] 原形 (for chained entries: this part's orig only)
     // Span of the MeCab node surface in the input text, in UTF-8 BYTES.
-    // `string` == input.substr(begin, length). For a chained (離合) dictionary entry
-    // the first part carries the whole node span; later parts (chain_flag == 1) have
-    // string == "" and length == 0, begin == end of the node span.
+    // `surface` == input.substr(begin, length): the true input slice. For a chained
+    // (離合) dictionary entry the first part carries the whole node span; later parts
+    // (chain_flag == 1) have surface == "" and length == 0, begin == end of the span.
+    // NOTE `string` keeps its legacy meaning (for chained entries interior parts hold
+    // their dictionary orig form, the last part the full surface) and is NOT the slice.
+    std::string surface;
     int begin;
     int length;
 };

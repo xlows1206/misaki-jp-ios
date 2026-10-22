@@ -217,19 +217,28 @@ struct JapaneseG2P::Impl {
                     info.pron = i < readParts.size() ? readParts[i] : "";
                 }
 
-                // `string` is the TRUE input slice (begin/length). MeCab gives one
-                // contiguous surface span per dictionary row, so a chained (離合)
-                // entry's first part owns the whole span and later parts are empty
-                // zero-length slices at the end of it; the pieces therefore always
-                // concatenate to the input. (Previously interior parts used their
-                // dictionary orig form, e.g. ありがとう + ありがとうございます.)
-                // Nothing in the TTS/accent paths reads `string`.
-                if (i == 0) {
+                // `string`: legacy semantics, byte-identical to before the extra
+                // fields were added. Only the final chain-part keeps the node's real
+                // MeCab surface span; earlier parts use their dictionary orig form,
+                // same as OpenJTalk's own NJDNode_load() (which likewise has no way
+                // to recover the exact original character span for interior chain
+                // parts -- the surface bytes only exist as one run).
+                if (partCount > 1 && i + 1 < partCount) {
+                    info.string = i < origParts.size() ? origParts[i] : "";
+                } else {
                     info.string = surface;
+                }
+                // `surface`/`begin`/`length`: the TRUE input slice. MeCab gives one
+                // contiguous span per dictionary row, so a chained (離合) entry's
+                // first part owns the whole span and later parts are empty
+                // zero-length slices at its end; the `surface`s therefore always
+                // concatenate to the input (modulo whitespace MeCab skips).
+                if (i == 0) {
+                    info.surface = surface;
                     info.begin = nodeBegin;
                     info.length = (int)n->length;
                 } else {
-                    info.string = "";
+                    info.surface = "";
                     info.begin = nodeBegin + (int)n->length;
                     info.length = 0;
                 }

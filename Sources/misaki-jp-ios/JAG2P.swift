@@ -185,9 +185,17 @@ public class JAG2P {
     /// - Parameter text: Input Japanese text.
     /// - Returns: One `JAToken` per token; `read` is guaranteed non-empty
     ///            (fallback chain read → pron → surface). Empty array in stub mode.
+    ///
+    /// `surface`/`read`/`pron`/`pos` are exactly what this method returned before the
+    /// extra fields existed. In particular, for a chained (離合) dictionary entry such as
+    /// ありがとうございます the two tokens have surfaces `ありがとう` and `ありがとうございます`
+    /// (dictionary orig of the interior part, full surface for the last), NOT the input
+    /// slice, and each token's `read` is that part's reading. `begin`/`length` refer to the
+    /// NORMALIZED text and describe the true slice (continuation parts: length 0), so they
+    /// do not necessarily match `surface` here; use `tokenizeRaw(_:)` for slice-exact tokens.
     public func tokenize(_ text: String) -> [JAToken] {
         let normalized = TextNormalizer.normalize(text, toHiragana: isStubMode)
-        return tokens(forAnalysedText: normalized) ?? []
+        return tokens(forAnalysedText: normalized, trueSurface: false) ?? []
     }
 
     /// Like `tokenize(_:)` but analyses EXACTLY `text`: no ruby replacement, no NFKC,
@@ -195,15 +203,21 @@ public class JAG2P {
     /// `text`, and the `surface`s concatenate back to `text` (apart from whitespace
     /// MeCab skips). Use this when you need to map tokens back onto the original string.
     ///
+    /// For a chained (離合) dictionary entry (e.g. ありがとうございます) the first token owns
+    /// the whole span (`surface == "ありがとうございます"`, `read` = its first part's reading)
+    /// and the continuation token has an EMPTY `surface` (`length == 0`) whose `read`/`pron`/
+    /// `orig` belong to that part (`ございます`). Do not pair a token's `surface` with its
+    /// `read` for chained entries; merge continuation tokens into the preceding one.
+    ///
     /// - Returns: `nil` when the dictionary is unusable (stub mode / init failure),
     ///   otherwise the tokens (possibly empty for empty input).
     /// - Important: Not thread safe. The underlying MeCab tagger is shared per `JAG2P`
     ///   instance; serialize calls (or use one instance per thread).
     public func tokenizeRaw(_ text: String) -> [JAToken]? {
-        return tokens(forAnalysedText: text)
+        return tokens(forAnalysedText: text, trueSurface: true)
     }
 
-    private func tokens(forAnalysedText text: String) -> [JAToken]? {
+    private func tokens(forAnalysedText text: String, trueSurface: Bool) -> [JAToken]? {
         guard let wrapper = g2pWrapper,
               let nodes = wrapper.extractNodes(text) else {
             return nil
@@ -212,7 +226,12 @@ public class JAG2P {
         var tokens: [JAToken] = []
         tokens.reserveCapacity(nodes.count)
         for node in nodes {
-            let surface = (node["string"] as? String) ?? ""
+            // Legacy dictionary `string` (for chained entries the interior parts hold the
+            // dictionary orig form). Used as `surface` by tokenize() and as the last-resort
+            // read fallback by both entry points.
+            let legacyString = (node["string"] as? String) ?? ""
+            // tokenizeRaw: the true input slice (empty for chained-entry continuations).
+            let surface = trueSurface ? ((node["surface"] as? String) ?? "") : legacyString
             let read = (node["read"] as? String) ?? ""
             let pron = (node["pron"] as? String) ?? ""
             let pos = (node["pos"] as? String) ?? ""
@@ -225,7 +244,7 @@ public class JAG2P {
             } else if !pron.isEmpty {
                 resolvedRead = pron
             } else {
-                resolvedRead = surface
+                resolvedRead = legacyString
             }
 
             tokens.append(JAToken(surface: surface,

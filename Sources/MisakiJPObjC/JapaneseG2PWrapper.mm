@@ -129,6 +129,7 @@
             dict[@"ctype"] = [NSString stringWithUTF8String:node.ctype.c_str()];
             dict[@"cform"] = [NSString stringWithUTF8String:node.cform.c_str()];
             dict[@"orig"] = [NSString stringWithUTF8String:node.orig.c_str()];
+            dict[@"surface"] = [NSString stringWithUTF8String:node.surface.c_str()];
             dict[@"begin"] = @(node.begin);
             dict[@"length"] = @(node.length);
             

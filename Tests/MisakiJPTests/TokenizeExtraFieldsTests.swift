@@ -55,12 +55,23 @@ final class TokenizeExtraFieldsTests: XCTestCase {
         }
     }
 
-    func testChainedEntrySurfaceNotDuplicated() throws {
+    func testRawChainedEntryTrueSurface() throws {
         let tokens = try rawTokens("ありがとうございます")
         XCTAssertEqual(tokens.map(\.surface), ["ありがとうございます", ""])
         XCTAssertEqual(tokens[1].length, 0)
         XCTAssertEqual(tokens[0].orig, "ありがとう")
         XCTAssertEqual(tokens[1].orig, "ございます")
+    }
+
+    /// tokenize() must keep the legacy `surface` semantics for chained entries.
+    func testTokenizeChainedEntryLegacySurfacePinned() throws {
+        let g2p = JAG2P()
+        let tokens = g2p.tokenize("ありがとうございます")
+        if tokens.isEmpty { throw XCTSkip("stub mode") }
+        XCTAssertEqual(tokens.map(\.surface), ["ありがとう", "ありがとうございます"])
+        // The true-slice span is still exposed through begin/length (normalized text).
+        XCTAssertEqual(tokens[0].length, "ありがとうございます".utf8.count)
+        XCTAssertEqual(tokens[1].length, 0)
     }
 
     func testConjugationFields() throws {
