@@ -14,6 +14,20 @@ struct OpenJTalkNode {
     int acc;
     int mora_size;
     int chain_flag;
+    // Extra dictionary fields (naist-jdic / IPADIC 11-column layout). Empty when the
+    // dictionary has "*" for the column.
+    std::string pos1;   // f[1] 品詞細分類1
+    std::string pos2;   // f[2] 品詞細分類2
+    std::string pos3;   // f[3] 品詞細分類3
+    std::string ctype;  // f[4] 活用型
+    std::string cform;  // f[5] 活用形
+    std::string orig;   // f[6] 原形 (for chained entries: this part's orig only)
+    // Span of the MeCab node surface in the input text, in UTF-8 BYTES.
+    // `string` == input.substr(begin, length). For a chained (離合) dictionary entry
+    // the first part carries the whole node span; later parts (chain_flag == 1) have
+    // string == "" and length == 0, begin == end of the node span.
+    int begin;
+    int length;
 };
 
 class JapaneseG2P {

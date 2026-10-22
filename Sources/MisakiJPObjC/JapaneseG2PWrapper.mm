@@ -123,6 +123,14 @@
             dict[@"acc"] = @(node.acc);
             dict[@"mora_size"] = @(node.mora_size);
             dict[@"chain_flag"] = @(node.chain_flag);
+            dict[@"pos1"] = [NSString stringWithUTF8String:node.pos1.c_str()];
+            dict[@"pos2"] = [NSString stringWithUTF8String:node.pos2.c_str()];
+            dict[@"pos3"] = [NSString stringWithUTF8String:node.pos3.c_str()];
+            dict[@"ctype"] = [NSString stringWithUTF8String:node.ctype.c_str()];
+            dict[@"cform"] = [NSString stringWithUTF8String:node.cform.c_str()];
+            dict[@"orig"] = [NSString stringWithUTF8String:node.orig.c_str()];
+            dict[@"begin"] = @(node.begin);
+            dict[@"length"] = @(node.length);
             
             [result addObject:dict];
         }
