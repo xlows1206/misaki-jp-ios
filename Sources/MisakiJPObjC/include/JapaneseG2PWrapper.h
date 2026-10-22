@@ -24,7 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Extract structure word nodes (including accent, mora size, pronunciation).
 /// @param text Input Japanese text.
-/// @return Array of Dictionaries containing node info ("read", "pron", "acc", "mora_size", "string", "pos", "chain_flag").
+/// @return Array of Dictionaries containing node info ("read", "pron", "acc", "mora_size", "string", "pos", "chain_flag",
+/// plus "pos1", "pos2", "pos3", "ctype", "cform", "orig", "surface" (NSString) and "begin", "length" (NSNumber)).
+/// "string" keeps its legacy meaning (for chained entries interior parts hold the dictionary orig form).
+/// "surface" is the exact UTF-8 slice of the input given by "begin"/"length" (UTF-8 byte offset/length);
+/// continuation parts of a chained entry have "surface" == "" and length 0.
+/// Not thread safe: the underlying MeCab tagger must not be used concurrently.
 - (nullable NSArray<NSDictionary<NSString *, id> *> *)extractNodes:(NSString *)text;
 
 /// Indicates if this is the stub version (always NO for full version)

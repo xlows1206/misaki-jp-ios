@@ -24,12 +24,49 @@ public struct JAToken: Equatable {
     public let pron: String
     /// Part of speech (feature f[0]).
     public let pos: String
+    /// 品詞細分類1 (f[1]); empty when the dictionary has `*`.
+    public let pos1: String
+    /// 品詞細分類2 (f[2]).
+    public let pos2: String
+    /// 品詞細分類3 (f[3]).
+    public let pos3: String
+    /// 活用型 (f[4]), e.g. 一段, 五段・カ行イ音便, 特殊・マス.
+    public let ctype: String
+    /// 活用形 (f[5]), e.g. 連用形, 未然形, 連用デ接続.
+    public let cform: String
+    /// 原形 (f[6]), dictionary form, e.g. 食べ → 食べる.
+    public let orig: String
+    /// UTF-8 byte offset of `surface` in the text that was analysed.
+    /// (`tokenize` analyses the NORMALIZED text, so offsets refer to that, not the raw input;
+    /// `tokenizeRaw` analyses exactly the given text.) 0 when unknown.
+    public let begin: Int
+    /// UTF-8 byte length of `surface`. A continuation part of a chained (離合)
+    /// dictionary entry (e.g. the ございます half of ありがとうございます) has
+    /// `surface == ""` and `length == 0`; the first part carries the whole span.
+    public let length: Int
 
     public init(surface: String, read: String, pron: String, pos: String) {
+        self.init(surface: surface, read: read, pron: pron, pos: pos,
+                  pos1: "", pos2: "", pos3: "", ctype: "", cform: "", orig: "",
+                  begin: 0, length: surface.utf8.count)
+    }
+
+    public init(surface: String, read: String, pron: String, pos: String,
+                pos1: String, pos2: String, pos3: String,
+                ctype: String, cform: String, orig: String,
+                begin: Int, length: Int) {
         self.surface = surface
         self.read = read
         self.pron = pron
         self.pos = pos
+        self.pos1 = pos1
+        self.pos2 = pos2
+        self.pos3 = pos3
+        self.ctype = ctype
+        self.cform = cform
+        self.orig = orig
+        self.begin = begin
+        self.length = length
     }
 }
 
@@ -143,21 +180,58 @@ public class JAG2P {
     /// post-processing is applied (that path produces `pron`, the opposite
     /// direction). Use this for ASR normalization, not `AccentPipeline`.
     ///
+    /// Thread safety: the MeCab tagger is not thread safe; serialize calls per instance.
+    ///
     /// - Parameter text: Input Japanese text.
     /// - Returns: One `JAToken` per token; `read` is guaranteed non-empty
-    ///            (fallback chain read → pron → surface).
+    ///            (fallback chain read → pron → surface). Empty array in stub mode.
+    ///
+    /// `surface`/`read`/`pron`/`pos` are exactly what this method returned before the
+    /// extra fields existed. In particular, for a chained (離合) dictionary entry such as
+    /// ありがとうございます the two tokens have surfaces `ありがとう` and `ありがとうございます`
+    /// (dictionary orig of the interior part, full surface for the last), NOT the input
+    /// slice, and each token's `read` is that part's reading. `begin`/`length` refer to the
+    /// NORMALIZED text and describe the true slice (continuation parts: length 0), so they
+    /// do not necessarily match `surface` here; use `tokenizeRaw(_:)` for slice-exact tokens.
     public func tokenize(_ text: String) -> [JAToken] {
         let normalized = TextNormalizer.normalize(text, toHiragana: isStubMode)
+        return tokens(forAnalysedText: normalized, trueSurface: false) ?? []
+    }
 
+    /// Like `tokenize(_:)` but analyses EXACTLY `text`: no ruby replacement, no NFKC,
+    /// no number expansion. `begin`/`length` of every token are UTF-8 byte offsets into
+    /// `text`, and the `surface`s concatenate back to `text` (apart from whitespace
+    /// MeCab skips). Use this when you need to map tokens back onto the original string.
+    ///
+    /// For a chained (離合) dictionary entry (e.g. ありがとうございます) the first token owns
+    /// the whole span (`surface == "ありがとうございます"`, `read` = its first part's reading)
+    /// and the continuation token has an EMPTY `surface` (`length == 0`) whose `read`/`pron`/
+    /// `orig` belong to that part (`ございます`). Do not pair a token's `surface` with its
+    /// `read` for chained entries; merge continuation tokens into the preceding one.
+    ///
+    /// - Returns: `nil` when the dictionary is unusable (stub mode / init failure),
+    ///   otherwise the tokens (possibly empty for empty input).
+    /// - Important: Not thread safe. The underlying MeCab tagger is shared per `JAG2P`
+    ///   instance; serialize calls (or use one instance per thread).
+    public func tokenizeRaw(_ text: String) -> [JAToken]? {
+        return tokens(forAnalysedText: text, trueSurface: true)
+    }
+
+    private func tokens(forAnalysedText text: String, trueSurface: Bool) -> [JAToken]? {
         guard let wrapper = g2pWrapper,
-              let nodes = wrapper.extractNodes(normalized) else {
-            return []
+              let nodes = wrapper.extractNodes(text) else {
+            return nil
         }
 
         var tokens: [JAToken] = []
         tokens.reserveCapacity(nodes.count)
         for node in nodes {
-            let surface = (node["string"] as? String) ?? ""
+            // Legacy dictionary `string` (for chained entries the interior parts hold the
+            // dictionary orig form). Used as `surface` by tokenize() and as the last-resort
+            // read fallback by both entry points.
+            let legacyString = (node["string"] as? String) ?? ""
+            // tokenizeRaw: the true input slice (empty for chained-entry continuations).
+            let surface = trueSurface ? ((node["surface"] as? String) ?? "") : legacyString
             let read = (node["read"] as? String) ?? ""
             let pron = (node["pron"] as? String) ?? ""
             let pos = (node["pos"] as? String) ?? ""
@@ -170,13 +244,21 @@ public class JAG2P {
             } else if !pron.isEmpty {
                 resolvedRead = pron
             } else {
-                resolvedRead = surface
+                resolvedRead = legacyString
             }
 
             tokens.append(JAToken(surface: surface,
                                   read: resolvedRead,
                                   pron: pron.isEmpty ? resolvedRead : pron,
-                                  pos: pos))
+                                  pos: pos,
+                                  pos1: (node["pos1"] as? String) ?? "",
+                                  pos2: (node["pos2"] as? String) ?? "",
+                                  pos3: (node["pos3"] as? String) ?? "",
+                                  ctype: (node["ctype"] as? String) ?? "",
+                                  cform: (node["cform"] as? String) ?? "",
+                                  orig: (node["orig"] as? String) ?? "",
+                                  begin: (node["begin"] as? NSNumber)?.intValue ?? 0,
+                                  length: (node["length"] as? NSNumber)?.intValue ?? surface.utf8.count))
         }
         return tokens
     }

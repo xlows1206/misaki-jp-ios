@@ -188,6 +188,7 @@ struct JapaneseG2P::Impl {
             std::string accMora = fields.size() > 9 ? fields[9] : "";
 
             std::string surface(n->surface, n->length);
+            int nodeBegin = (int)(n->surface - text.c_str());
 
             // Chained/compound entry: orig/read/pron/acc are each colon-
             // separated per sub-morpheme (see file-level comment above).
@@ -216,16 +217,37 @@ struct JapaneseG2P::Impl {
                     info.pron = i < readParts.size() ? readParts[i] : "";
                 }
 
-                // Only the final chain-part keeps the node's real MeCab surface
-                // span; earlier parts use their dictionary orig form, same as
-                // OpenJTalk's own NJDNode_load() (which likewise has no way to
-                // recover the exact original character span for interior
-                // chain parts -- the surface bytes only exist as one run).
+                // `string`: legacy semantics, byte-identical to before the extra
+                // fields were added. Only the final chain-part keeps the node's real
+                // MeCab surface span; earlier parts use their dictionary orig form,
+                // same as OpenJTalk's own NJDNode_load() (which likewise has no way
+                // to recover the exact original character span for interior chain
+                // parts -- the surface bytes only exist as one run).
                 if (partCount > 1 && i + 1 < partCount) {
                     info.string = i < origParts.size() ? origParts[i] : "";
                 } else {
                     info.string = surface;
                 }
+                // `surface`/`begin`/`length`: the TRUE input slice. MeCab gives one
+                // contiguous span per dictionary row, so a chained (離合) entry's
+                // first part owns the whole span and later parts are empty
+                // zero-length slices at its end; the `surface`s therefore always
+                // concatenate to the input (modulo whitespace MeCab skips).
+                if (i == 0) {
+                    info.surface = surface;
+                    info.begin = nodeBegin;
+                    info.length = (int)n->length;
+                } else {
+                    info.surface = "";
+                    info.begin = nodeBegin + (int)n->length;
+                    info.length = 0;
+                }
+                info.pos1  = fields.size() > 1 ? fields[1] : "";
+                info.pos2  = fields.size() > 2 ? fields[2] : "";
+                info.pos3  = fields.size() > 3 ? fields[3] : "";
+                info.ctype = fields.size() > 4 ? fields[4] : "";
+                info.cform = fields.size() > 5 ? fields[5] : "";
+                info.orig  = i < origParts.size() ? origParts[i] : "";
 
                 int acc = 0, mora = 0;
                 if (i < accParts.size() && !accParts[i].empty()) {
